@@ -55,8 +55,6 @@ namespace BangazonWorkforce.Controllers
             {
                 return View();
             }
-
-
         }
     }
 }

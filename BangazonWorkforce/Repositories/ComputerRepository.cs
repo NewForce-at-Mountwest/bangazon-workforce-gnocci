@@ -101,12 +101,11 @@ namespace BangazonWorkforce.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"INSERT INTO Computer
-                ( PurchaseDate, Make, Manufacturer )
-                VALUES
-                ( @purchaseDate, @make, @Manufacturer)";
+                (PurchaseDate, Make, Manufacturer) VALUES
+                (@purchaseDate, @make, @manufacturer)";
                     cmd.Parameters.Add(new SqlParameter("@purchaseDate", computer.PurchaseDate));
                     cmd.Parameters.Add(new SqlParameter("@make", computer.Make));
-                    cmd.Parameters.Add(new SqlParameter("@Manufacturer", computer.Manufacturer));
+                    cmd.Parameters.Add(new SqlParameter("@manufacturer", computer.Manufacturer));
                     cmd.ExecuteNonQuery();
 
                 }
