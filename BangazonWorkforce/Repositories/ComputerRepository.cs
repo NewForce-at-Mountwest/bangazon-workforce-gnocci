@@ -113,6 +113,48 @@ namespace BangazonWorkforce.Repositories
 
         }
 
+        public static void UpdateComputer(int id, Computer computer)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    // Update the student's basic info
+                    string command = @"UPDATE Computer
+                                            SET Make=@make, 
+                                            Manufacturer=@manufacturer, 
+                                            purchaseDate=@purchaseDate
+                                            WHERE Id = @id";
+                    cmd.CommandText = command;
+                    cmd.Parameters.Add(new SqlParameter("@make", computer.Make));
+                    cmd.Parameters.Add(new SqlParameter("@manufacturer", computer.Manufacturer));
+                    cmd.Parameters.Add(new SqlParameter("@purchaseDate", computer.PurchaseDate));
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
+
+        public static void DeleteComputer(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Computer WHERE Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                }
+
+            }
+
+        }
+
     }
 }
 

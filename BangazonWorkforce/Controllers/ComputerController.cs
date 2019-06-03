@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using BangazonWorkforce.Models;
 using BangazonWorkforce.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+
 
 namespace BangazonWorkforce.Controllers
 {
@@ -56,5 +58,55 @@ namespace BangazonWorkforce.Controllers
                 return View();
             }
         }
+
+        // GET: Students/Delete/5
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            Computer computer = ComputerRepository.GetOneComputer(id);
+            return View(computer);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection formCollection)
+        {
+            try
+            {
+
+                ComputerRepository.DeleteComputer(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        //------- EDIT BUT I DIDN'T NEED TO DO EDIT FOR MY TICKET =)) ----------
+        //public ActionResult Edit(int id)
+        //{
+        //    Computer computer = ComputerRepository.GetOneComputer(id);
+        //    return View(computer);
+        //}
+
+
+        //// POST: Students/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, Computer computer)
+        //{
+        //    try
+        //    {
+        //        ComputerRepository.UpdateComputer(id, computer);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return View(computer);
+        //    }
+        //}
+
     }
 }
