@@ -16,6 +16,8 @@ namespace BangazonAPI.Models
 
         public bool IsSuperVisor { get; set; }
 
+        public string Department { get; set; }
+
         //------------------Referenct to Department Name Ticket #6--------------------//
         public Department CurrentDepartment { get; set; }
 
