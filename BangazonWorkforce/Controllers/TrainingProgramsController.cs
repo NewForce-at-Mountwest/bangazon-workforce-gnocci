@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bangazon.Models;
+using BangazonWorkforce.Models;
 using BangazonWorkforce.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,18 +40,18 @@ namespace BangazonWorkforce.Controllers
         // GET: TrainingPrograms/Create
         public ActionResult Create()
         {
-            return View();
+            TrainingProgram trainingProgram = new TrainingProgram();
+            return View(trainingProgram);
         }
 
         // POST: TrainingPrograms/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(TrainingProgram trainingProgram)
         {
             try
             {
-                // TODO: Add insert logic here
-
+                TrainingProgramRepository.CreateTrainingProgram(trainingProgram);
                 return RedirectToAction(nameof(Index));
             }
             catch

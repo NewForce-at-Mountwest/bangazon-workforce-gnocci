@@ -1,4 +1,4 @@
-﻿using Bangazon.Models;
+﻿using BangazonWorkforce.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -68,139 +68,134 @@ namespace BangazonWorkforce.Repositories
 
             }
 
-            //public static Student GetOneStudent(int id)
-            //{
-            //    using (SqlConnection conn = Connection)
-            //    {
-            //        conn.Open();
-            //        using (SqlCommand cmd = conn.CreateCommand())
-            //        {
-            //            cmd.CommandText = @"
-            //            SELECT
-            //                s.Id, s.firstName, s.lastName, s.slackHandle, s.cohortId,
-            //                c.Name AS 'Cohort Name'
-            //            FROM Student s
-            //            JOIN Cohort c ON s.CohortId = c.Id
-            //            WHERE s.Id = @id";
-            //            cmd.Parameters.Add(new SqlParameter("@id", id));
-            //            SqlDataReader reader = cmd.ExecuteReader();
+        //public static TrainingProgram GetOneTrainingProgram(int id)
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            cmd.CommandText = @"
+        //                SELECT
+        //                    Id, Name, StartDate, EndDate, MaxAttendees
+        //                FROM TrainingProgram
+        //                WHERE Id = @id";
+        //            cmd.Parameters.Add(new SqlParameter("@id", id));
+        //            SqlDataReader reader = cmd.ExecuteReader();
 
-            //            Student Student = null;
+        //            TrainingProgram TrainingProgram = null;
 
-            //            if (reader.Read())
-            //            {
-            //                Student = new Student
-            //                {
-            //                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
-            //                    FirstName = reader.GetString(reader.GetOrdinal("firstName")),
-            //                    LastName = reader.GetString(reader.GetOrdinal("lastName")),
-            //                    SlackHandle = reader.GetString(reader.GetOrdinal("slackHandle")),
-            //                    CohortId = reader.GetInt32(reader.GetOrdinal("cohortId")),
-            //                    CurrentCohort = new Cohort
-            //                    {
-            //                        name = reader.GetString(reader.GetOrdinal("Cohort Name"))
-            //                    }
-            //                };
-            //            }
-            //            reader.Close();
+        //            if (reader.Read())
+        //            {
+        //                TrainingProgram = new TrainingProgram
+        //                {
+        //                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+        //                    Name = reader.GetString(reader.GetOrdinal("firstName")),
+        //                    StartDate = reader.GetDateTime(reader.GetOrdinal("StartDate")),
+        //                    EndDate = reader.GetDateTime(reader.GetOrdinal("EndDate")),
+        //                    MaxAttendees = reader.GetInt32(reader.GetOrdinal("MaxAttendees")),
 
-            //            return Student;
-            //        }
-            //    }
+        //                };
+        //            }
+        //            reader.Close();
 
-            //}
+        //            return TrainingProgram;
+        //        }
+        //    }
 
-            //public static Student GetOneStudentWithExercises(int id)
-            //{
-            //    Student student = GetOneStudent(id);
-            //    student.Exercises = ExerciseRepository.GetAssignedExercisesByStudent(id);
-            //    return student;
-            //}
+        //}
 
-            //public static void CreateStudent(CreateStudentViewModel model)
-            //{
-            //    using (SqlConnection conn = Connection)
-            //    {
-            //        conn.Open();
-            //        using (SqlCommand cmd = conn.CreateCommand())
-            //        {
-            //            cmd.CommandText = @"INSERT INTO Student
-            //    ( FirstName, LastName, SlackHandle, CohortId )
-            //    VALUES
-            //    ( @firstName, @lastName, @slackHandle, @cohortId )";
-            //            cmd.Parameters.Add(new SqlParameter("@firstName", model.student.FirstName));
-            //            cmd.Parameters.Add(new SqlParameter("@lastName", model.student.LastName));
-            //            cmd.Parameters.Add(new SqlParameter("@slackHandle", model.student.SlackHandle));
-            //            cmd.Parameters.Add(new SqlParameter("@cohortId", model.student.CohortId));
-            //            cmd.ExecuteNonQuery();
+        //public static Student GetOneStudentWithExercises(int id)
+        //{
+        //    Student student = GetOneStudent(id);
+        //    student.Exercises = ExerciseRepository.GetAssignedExercisesByStudent(id);
+        //    return student;
+        //}
+
+        public static void CreateTrainingProgram(TrainingProgram trainingProgram)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO TrainingProgram
+            ( Name, StartDate, EndDate, MaxAttendees )
+            VALUES
+            ( @Name, @StartDate, @EndDate, @MaxAttendees )";
+                    cmd.Parameters.Add(new SqlParameter("@Name", trainingProgram.Name));
+                    cmd.Parameters.Add(new SqlParameter("@StartDate", trainingProgram.StartDate));
+                    cmd.Parameters.Add(new SqlParameter("@EndDate", trainingProgram.EndDate));
+                    cmd.Parameters.Add(new SqlParameter("@MaxAttendees", trainingProgram.MaxAttendees));
+                    cmd.ExecuteNonQuery();
 
 
-            //        }
-            //    }
+                }
+            }
 
-            //}
+        }
 
-            //public static void UpdateStudent(int id, EditStudentViewModel viewModel)
-            //{
-            //    using (SqlConnection conn = Connection)
-            //    {
-            //        conn.Open();
-            //        using (SqlCommand cmd = conn.CreateCommand())
-            //        {
-            //            string command = @"UPDATE Student
-            //                                SET firstName=@firstName, 
-            //                                lastName=@lastName, 
-            //                                slackHandle=@slackHandle, 
-            //                                cohortId=@cohortId
-            //                                WHERE Id = @id
-            //                                DELETE FROM StudentExercise WHERE studentId =@id";
+        //public static void UpdateStudent(int id, EditStudentViewModel viewModel)
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            string command = @"UPDATE Student
+        //                                SET firstName=@firstName, 
+        //                                lastName=@lastName, 
+        //                                slackHandle=@slackHandle, 
+        //                                cohortId=@cohortId
+        //                                WHERE Id = @id
+        //                                DELETE FROM StudentExercise WHERE studentId =@id";
 
-            //            viewModel.SelectedExercises.ForEach(exerciseId =>
-            //            {
-            //                command += $" INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
+        //            viewModel.SelectedExercises.ForEach(exerciseId =>
+        //            {
+        //                command += $" INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
 
-            //            });
-            //            cmd.CommandText = command;
-            //            cmd.Parameters.Add(new SqlParameter("@firstName", viewModel.student.FirstName));
-            //            cmd.Parameters.Add(new SqlParameter("@lastName", viewModel.student.LastName));
-            //            cmd.Parameters.Add(new SqlParameter("@slackHandle", viewModel.student.SlackHandle));
-            //            cmd.Parameters.Add(new SqlParameter("@cohortId", viewModel.student.CohortId));
-            //            cmd.Parameters.Add(new SqlParameter("@id", id));
+        //            });
+        //            cmd.CommandText = command;
+        //            cmd.Parameters.Add(new SqlParameter("@firstName", viewModel.student.FirstName));
+        //            cmd.Parameters.Add(new SqlParameter("@lastName", viewModel.student.LastName));
+        //            cmd.Parameters.Add(new SqlParameter("@slackHandle", viewModel.student.SlackHandle));
+        //            cmd.Parameters.Add(new SqlParameter("@cohortId", viewModel.student.CohortId));
+        //            cmd.Parameters.Add(new SqlParameter("@id", id));
 
-            //            int rowsAffected = cmd.ExecuteNonQuery();
+        //            int rowsAffected = cmd.ExecuteNonQuery();
 
-            //        }
+        //        }
 
-            //    }
+        //    }
 
-            //}
+        //}
 
-            //public static void DeleteStudent(int id)
-            //{
-            //    using (SqlConnection conn = Connection)
-            //    {
-            //        conn.Open();
-            //        using (SqlCommand cmd = conn.CreateCommand())
-            //        {
-            //            cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId = @id";
-            //            cmd.Parameters.Add(new SqlParameter("@id", id));
+        //public static void DeleteStudent(int id)
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId = @id";
+        //            cmd.Parameters.Add(new SqlParameter("@id", id));
 
-            //            int rowsAffected = cmd.ExecuteNonQuery();
+        //            int rowsAffected = cmd.ExecuteNonQuery();
 
-            //        }
-            //        using (SqlCommand cmd = conn.CreateCommand())
-            //        {
-            //            cmd.CommandText = @"DELETE FROM Student WHERE Id = @id";
-            //            cmd.Parameters.Add(new SqlParameter("@id", id));
+        //        }
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            cmd.CommandText = @"DELETE FROM Student WHERE Id = @id";
+        //            cmd.Parameters.Add(new SqlParameter("@id", id));
 
-            //            int rowsAffected = cmd.ExecuteNonQuery();
+        //            int rowsAffected = cmd.ExecuteNonQuery();
 
-            //        }
+        //        }
 
-            //    }
+        //    }
 
-            //}
-        
+        //}
+
     }
 }
 
