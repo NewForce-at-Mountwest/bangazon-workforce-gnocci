@@ -4,31 +4,41 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Departments</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create"></a>
+    <a asp-action="Create">Create New Department</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Budget)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Budget)
+            </th>*@
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var department in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => department.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Budget)
+                @Html.DisplayFor(modelItem => department.Name)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => department.Budget)
+            </td>*@
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = department.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = department.Id })
             </td>
         </tr>
 }

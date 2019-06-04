@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using BangazonWorkforce.Models;
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 
 namespace BangazonWorkforce.Controllers
 {
