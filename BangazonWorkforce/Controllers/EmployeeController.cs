@@ -6,13 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using BangazonWorkforce.Models;
-using BangazonAPI.Models;
 
 namespace BangazonWorkforce.Controllers
 {
     public class EmployeeController : Controller
     {
-
         public EmployeeController(IConfiguration config)
         {
             EmployeeRepository.SetConfig(config);
