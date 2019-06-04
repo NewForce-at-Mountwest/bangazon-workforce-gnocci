@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using BangazonAPI.Models;
+using BangazonWorkforce.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace BangazonWorkforce.Repositories
@@ -80,11 +80,11 @@ namespace BangazonWorkforce.Repositories
                     cmd.Parameters.Add(new SqlParameter("@id", id));
                     SqlDataReader reader = cmd.ExecuteReader();
 
-                    Employee Employee = null;
+                    Employee employee = null;
 
                     if (reader.Read())
                     {
-                        Employee = new Employee
+                        employee = new Employee
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
@@ -95,7 +95,7 @@ namespace BangazonWorkforce.Repositories
                     }
                     reader.Close();
 
-                    return Employee;
+                    return employee;
                 }
             }
 
