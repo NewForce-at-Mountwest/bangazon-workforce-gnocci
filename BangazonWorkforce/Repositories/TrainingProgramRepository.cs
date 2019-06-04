@@ -148,6 +148,7 @@ namespace BangazonWorkforce.Repositories
         {
             using (SqlConnection conn = Connection)
             {
+
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
@@ -167,67 +168,63 @@ namespace BangazonWorkforce.Repositories
 
         }
 
-        //public static void UpdateStudent(int id, EditStudentViewModel viewModel)
-        //{
-        //    using (SqlConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            string command = @"UPDATE Student
-        //                                SET firstName=@firstName, 
-        //                                lastName=@lastName, 
-        //                                slackHandle=@slackHandle, 
-        //                                cohortId=@cohortId
-        //                                WHERE Id = @id
-        //                                DELETE FROM StudentExercise WHERE studentId =@id";
+        public static void UpdateTrainingProgram(int id, TrainingProgram trainingProgram)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    if (trainingProgram.StartDate > DateTime.Now)
+                    {
+                        string command = @"UPDATE TrainingProgram
+                                        SET Name=@Name, 
+                                        StartDate=@StartDate, 
+                                        EndDate=@EndDate, 
+                                        MaxAttendees=@Maxattendees
+                                        WHERE Id = @id";
+                        cmd.CommandText = command;
+                        cmd.Parameters.Add(new SqlParameter("@Name", trainingProgram.Name));
+                        cmd.Parameters.Add(new SqlParameter("@StartDate", trainingProgram.StartDate));
+                        cmd.Parameters.Add(new SqlParameter("@EndDate", trainingProgram.EndDate));
+                        cmd.Parameters.Add(new SqlParameter("@MaxAttendees", trainingProgram.MaxAttendees));
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
 
-        //            viewModel.SelectedExercises.ForEach(exerciseId =>
-        //            {
-        //                command += $" INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                    }
 
-        //            });
-        //            cmd.CommandText = command;
-        //            cmd.Parameters.Add(new SqlParameter("@firstName", viewModel.student.FirstName));
-        //            cmd.Parameters.Add(new SqlParameter("@lastName", viewModel.student.LastName));
-        //            cmd.Parameters.Add(new SqlParameter("@slackHandle", viewModel.student.SlackHandle));
-        //            cmd.Parameters.Add(new SqlParameter("@cohortId", viewModel.student.CohortId));
-        //            cmd.Parameters.Add(new SqlParameter("@id", id));
+            }
 
-        //            int rowsAffected = cmd.ExecuteNonQuery();
-
-        //        }
-
-        //    }
-
-        //}
-
-        //public static void DeleteStudent(int id)
-        //{
-        //    using (SqlConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId = @id";
-        //            cmd.Parameters.Add(new SqlParameter("@id", id));
-
-        //            int rowsAffected = cmd.ExecuteNonQuery();
-
-        //        }
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            cmd.CommandText = @"DELETE FROM Student WHERE Id = @id";
-        //            cmd.Parameters.Add(new SqlParameter("@id", id));
-
-        //            int rowsAffected = cmd.ExecuteNonQuery();
-
-        //        }
-
-        //    }
-
-        //}
+        }
 
     }
+
+    //public static void DeleteStudent(int id)
+    //{
+    //    using (SqlConnection conn = Connection)
+    //    {
+    //        conn.Open();
+    //        using (SqlCommand cmd = conn.CreateCommand())
+    //        {
+    //            cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId = @id";
+    //            cmd.Parameters.Add(new SqlParameter("@id", id));
+
+    //            int rowsAffected = cmd.ExecuteNonQuery();
+
+    //        }
+    //        using (SqlCommand cmd = conn.CreateCommand())
+    //        {
+    //            cmd.CommandText = @"DELETE FROM Student WHERE Id = @id";
+    //            cmd.Parameters.Add(new SqlParameter("@id", id));
+
+    //            int rowsAffected = cmd.ExecuteNonQuery();
+
+    //        }
+
+    //    }
+
+    //}
+
+}
 }
 
