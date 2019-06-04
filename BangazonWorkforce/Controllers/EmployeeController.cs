@@ -28,7 +28,7 @@ namespace BangazonWorkforce.Controllers
                 return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             }
         }
-        // GET: Students
+        // GET: Employees
         public ActionResult Index()
         {
             using (SqlConnection conn = Connection)
