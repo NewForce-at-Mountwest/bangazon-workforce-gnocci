@@ -85,28 +85,28 @@ namespace BangazonWorkforce.Controllers
 
 
         //------- EDIT BUT I DIDN'T NEED TO DO EDIT FOR MY TICKET =)) ----------
-        //public ActionResult Edit(int id)
-        //{
-        //    Computer computer = ComputerRepository.GetOneComputer(id);
-        //    return View(computer);
-        //}
+        public ActionResult Edit(int id)
+        {
+            Computer computer = ComputerRepository.GetOneComputer(id);
+            return View(computer);
+        }
 
 
-        //// POST: Students/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, Computer computer)
-        //{
-        //    try
-        //    {
-        //        ComputerRepository.UpdateComputer(id, computer);
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return View(computer);
-        //    }
-        //}
+        //POST: Students/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, Computer computer)
+        {
+            try
+            {
+                ComputerRepository.UpdateComputer(id, computer);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                return View(computer);
+            }
+        }
 
     }
 }
