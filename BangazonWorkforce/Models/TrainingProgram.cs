@@ -13,7 +13,7 @@ namespace Bangazon.Models
         public DateTime EndDate { get; set; }
         public int MaxAttendees { get; set; }
 
-        public List<Employee> Employees { get; set; } = new List<Employee>();
+        //public List<Employee> Employees { get; set; } = new List<Employee>();
 
 
     }
