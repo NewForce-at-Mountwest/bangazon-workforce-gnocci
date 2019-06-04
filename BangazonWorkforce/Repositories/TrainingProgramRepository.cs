@@ -31,7 +31,7 @@ namespace BangazonWorkforce.Repositories
             {
                 using (SqlConnection conn = Connection)
                 {
-                    conn.Open(); 
+                    conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = @"
@@ -78,7 +78,7 @@ namespace BangazonWorkforce.Repositories
                     cmd.CommandText = @"
                         SELECT
                             t.Id, t.Name, t.StartDate, t.EndDate, t.MaxAttendees, e.FirstName, e.LastName
-                        FROM TrainingProgram t 
+                        FROM TrainingProgram t
                         LEFT JOIN EmployeeTraining et ON t.Id = et.TrainingProgramId
                         lEFT JOIN Employee e ON et.EmployeeId = e.Id
                         WHERE t.Id = @id";
@@ -96,7 +96,7 @@ namespace BangazonWorkforce.Repositories
                             StartDate = reader.GetDateTime(reader.GetOrdinal("StartDate")),
                             EndDate = reader.GetDateTime(reader.GetOrdinal("EndDate")),
                             MaxAttendees = reader.GetInt32(reader.GetOrdinal("MaxAttendees")),
-                            
+
                         };
                     }
                     reader.Close();
@@ -178,9 +178,9 @@ namespace BangazonWorkforce.Repositories
                     if (trainingProgram.StartDate > DateTime.Now)
                     {
                         string command = @"UPDATE TrainingProgram
-                                        SET Name=@Name, 
-                                        StartDate=@StartDate, 
-                                        EndDate=@EndDate, 
+                                        SET Name=@Name,
+                                        StartDate=@StartDate,
+                                        EndDate=@EndDate,
                                         MaxAttendees=@Maxattendees
                                         WHERE Id = @id";
                         cmd.CommandText = command;
