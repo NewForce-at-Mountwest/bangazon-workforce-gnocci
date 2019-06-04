@@ -1,103 +1,128 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using BangazonAPI.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-
-namespace BangazonWorkforce.Controllers
+namespace BangazonWorkforce.Repositories
 {
-    public class EmployeeController : Controller
+    public class EmployeeRepository
     {
 
-        public EmployeeController(IConfiguration config)
+        private static IConfiguration _config;
+
+        public static void SetConfig(IConfiguration configuration)
         {
-            EmployeeRepository.SetConfig(config);
+            _config = configuration;
         }
 
-        // GET: Employee
-        public ActionResult Index()
+        public static SqlConnection Connection
         {
-            List<Employee> allEmployees = EmployeeRepository.GetAllEmployees();
-            return View(allEmployees);
-        }
-
-        // GET: Exercise/Details/5
-        public ActionResult Details(int id)
-        {
-            EmployeeViewModel vm = new EmployeeViewModel(id);
-            return View(vm);
-        }
-
-        // GET: Exercise/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Exercise/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            get
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             }
         }
 
-        // GET: Exercise/Edit/5
-        public ActionResult Edit(int id)
+        public static List<Employee> GetEmployees()
         {
-            return View();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                         SELECT e.Id,
+                     e.FirstName,
+                    e.LastName,
+                    d.[Name] AS 'department'
+                    FROM Employee e FULL JOIN Department d ON e.DepartmentId = d.Id";
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Employee> employees = new List<Employee>();
+                    while (reader.Read())
+                    {
+                        Employee employee = new Employee
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            Department = reader.GetString(reader.GetOrdinal("department"))
+                        };
+
+                        employees.Add(employee);
+                    }
+
+                    reader.Close();
+
+                    return employees;
+                }
+            }
+
         }
 
-        // POST: Exercise/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public static Employee GetOneEmployee(int id)
         {
-            try
+            using (SqlConnection conn = Connection)
             {
-                // TODO: Add update logic here
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT e.Id,
+                     e.FirstName,
+                    e.LastName,
+                    d.[Name] AS 'department'
+                    FROM Employee e FULL JOIN Department d ON e.DepartmentId = d.Id
+                    WHERE e.Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                return RedirectToAction(nameof(Index));
+                    Employee Employee = null;
+
+                    if (reader.Read())
+                    {
+                        Employee = new Employee
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            IsSuperVisor = reader.GetBoolean(reader.GetOrdinal("isSuperVisor")),
+                            Department = reader.GetString(reader.GetOrdinal("department"))
+                        };
+                    }
+                    reader.Close();
+
+                    return Employee;
+                }
             }
-            catch
-            {
-                return View();
-            }
+
         }
 
-        // GET: Exercise/Delete/5
-        public ActionResult Delete(int id)
+        public static void UpdateEmployee(int id, Employee employee)
         {
-            return View();
-        }
-
-        // POST: Exercise/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
+            using (SqlConnection conn = Connection)
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    // Update the student's basic info
+                    string command = @"UPDATE Student
+                                            SET firstName=@firstName, 
+                                            lastName=@lastName, 
+                                            isSuperVisor=@isSuperVisor, 
+                                            DepartmentId=@DepartmentId
+                                            WHERE Id = @id";
+                    cmd.CommandText = command;
+                    cmd.Parameters.Add(new SqlParameter("@firstName", employee.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@lastName", employee.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@isSuperVisor", employee.IsSuperVisor));
+                    cmd.Parameters.Add(new SqlParameter("@DepartmentId", employee.DepartmentId));
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                }
             }
         }
     }
