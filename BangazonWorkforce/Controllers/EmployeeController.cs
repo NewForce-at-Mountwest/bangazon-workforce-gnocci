@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using BangazonWorkforce.Models;
 using BangazonAPI.Models;
+using BangazonWorkforce.Repositories;
 
 namespace BangazonWorkforce.Controllers
 {
@@ -64,5 +65,7 @@ namespace BangazonWorkforce.Controllers
                 }
             }
         }
+
+
     }
 }
