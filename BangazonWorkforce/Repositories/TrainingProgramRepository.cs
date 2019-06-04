@@ -199,31 +199,7 @@ namespace BangazonWorkforce.Repositories
 
     }
 
-    //public static void DeleteStudent(int id)
-    //{
-    //    using (SqlConnection conn = Connection)
-    //    {
-    //        conn.Open();
-    //        using (SqlCommand cmd = conn.CreateCommand())
-    //        {
-    //            cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId = @id";
-    //            cmd.Parameters.Add(new SqlParameter("@id", id));
-
-    //            int rowsAffected = cmd.ExecuteNonQuery();
-
-    //        }
-    //        using (SqlCommand cmd = conn.CreateCommand())
-    //        {
-    //            cmd.CommandText = @"DELETE FROM Student WHERE Id = @id";
-    //            cmd.Parameters.Add(new SqlParameter("@id", id));
-
-    //            int rowsAffected = cmd.ExecuteNonQuery();
-
-    //        }
-
-    //    }
-
-    //}
+   
 
 }
 }
