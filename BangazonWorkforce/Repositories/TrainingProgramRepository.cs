@@ -68,49 +68,81 @@ namespace BangazonWorkforce.Repositories
 
             }
 
-        //public static TrainingProgram GetOneTrainingProgram(int id)
-        //{
-        //    using (SqlConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            cmd.CommandText = @"
-        //                SELECT
-        //                    Id, Name, StartDate, EndDate, MaxAttendees
-        //                FROM TrainingProgram
-        //                WHERE Id = @id";
-        //            cmd.Parameters.Add(new SqlParameter("@id", id));
-        //            SqlDataReader reader = cmd.ExecuteReader();
+        public static TrainingProgram GetOneTrainingProgram(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT
+                            t.Id, t.Name, t.StartDate, t.EndDate, t.MaxAttendees, e.FirstName, e.LastName
+                        FROM TrainingProgram t 
+                        LEFT JOIN EmployeeTraining et ON t.Id = et.TrainingProgramId
+                        lEFT JOIN Employee e ON et.EmployeeId = e.Id
+                        WHERE t.Id = @id";
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-        //            TrainingProgram TrainingProgram = null;
+                    TrainingProgram TrainingProgram = null;
 
-        //            if (reader.Read())
-        //            {
-        //                TrainingProgram = new TrainingProgram
-        //                {
-        //                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
-        //                    Name = reader.GetString(reader.GetOrdinal("firstName")),
-        //                    StartDate = reader.GetDateTime(reader.GetOrdinal("StartDate")),
-        //                    EndDate = reader.GetDateTime(reader.GetOrdinal("EndDate")),
-        //                    MaxAttendees = reader.GetInt32(reader.GetOrdinal("MaxAttendees")),
+                    if (reader.Read())
+                    {
+                        TrainingProgram = new TrainingProgram
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                            StartDate = reader.GetDateTime(reader.GetOrdinal("StartDate")),
+                            EndDate = reader.GetDateTime(reader.GetOrdinal("EndDate")),
+                            MaxAttendees = reader.GetInt32(reader.GetOrdinal("MaxAttendees")),
+                            
+                        };
+                    }
+                    reader.Close();
 
-        //                };
-        //            }
-        //            reader.Close();
+                     return TrainingProgram;
+                }
+            }
 
-        //            return TrainingProgram;
-        //        }
-        //    }
+        }
 
-        //}
+        public static TrainingProgram GetOneTrainingProgramWithAttendingEmployees(int id)
+        {
+            TrainingProgram trainingProgram = GetOneTrainingProgram(id);
+            trainingProgram.Employees = TrainingProgramRepository.GetEmployeesAttendingTraining(id);
+            return trainingProgram;
+        }
 
-        //public static Student GetOneStudentWithExercises(int id)
-        //{
-        //    Student student = GetOneStudent(id);
-        //    student.Exercises = ExerciseRepository.GetAssignedExercisesByStudent(id);
-        //    return student;
-        //}
+
+        public static List<Employee> GetEmployeesAttendingTraining(int id)
+        {
+
+            List<Employee> Employees = new List<Employee>();
+
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT e.Id, e.FirstName, e.LastName FROM Employee e JOIN EmployeeTraining et ON e.Id = et.EmployeeId WHERE et.TrainingProgramId = @id";
+
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Employees.Add(new Employee
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                        });
+                    }
+                    reader.Close();
+                }
+            }
+            return Employees;
+        }
 
         public static void CreateTrainingProgram(TrainingProgram trainingProgram)
         {
