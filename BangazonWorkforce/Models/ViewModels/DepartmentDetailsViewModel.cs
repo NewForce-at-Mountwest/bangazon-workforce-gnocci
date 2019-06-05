@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BangazonWorkforce.Models
+namespace BangazonWorkforce.Models.ViewModels
 {
-    public class Department
+    public class DepartmentDetailsViewModel
     {
         public int Id { get; set; }
 
@@ -13,11 +13,7 @@ namespace BangazonWorkforce.Models
 
         public int Budget { get; set; }
 
-        //---------------List of Employees Ticket #7-------------//
-
         public List<Employee> EmployeeList { get; set; } = new List<Employee>();
-
-        public int TotalEmployees { get; set; }
 
     }
 }

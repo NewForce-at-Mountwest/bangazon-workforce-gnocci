@@ -52,7 +52,7 @@ namespace BangazonWorkforce.Controllers
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                            Department = reader.GetString(reader.GetOrdinal("department"))
+                            Department = reader.GetString(reader.GetOrdinal("Department"))
                         };
 
                         employees.Add(employee);

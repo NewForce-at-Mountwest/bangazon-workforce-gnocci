@@ -1,4 +1,6 @@
 ﻿using BangazonWorkforce.Models;
+using BangazonWorkforce.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -35,8 +37,11 @@ namespace BangazonWorkforce.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT
-                            d.Id, d.Name, d.Budget
-                        FROM Department d";
+                            d.Id, d.Name, d.Budget, count(e.Id) TotalEmployees
+                        FROM Department d
+                        FULL JOIN Employee e on d.Id = e.DepartmentId 
+                        group by d.Id, d.Name, d.Budget
+                        ";
                     SqlDataReader reader = cmd.ExecuteReader();
                     List<Department> departments = new List<Department>();
                     while (reader.Read())
@@ -45,17 +50,55 @@ namespace BangazonWorkforce.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
-                            Budget = reader.GetInt32(reader.GetOrdinal("Budget"))
+                            Budget = reader.GetInt32(reader.GetOrdinal("Budget")),
+                            TotalEmployees = reader.GetInt32(reader.GetOrdinal("TotalEmployees"))
                         };
                         departments.Add(department);
                     }
-                    reader.Close();
+                        reader.Close();
                     return departments;
                 }
             }
         }
 
-     //Get Single Department:
+        //Get Single Department (Details):
+        //public static async Task<Department> GetDepartmentDetails(int id)
+        //{
+        //    using (SqlConnection conn = Connection)
+        //    {
+        //        conn.Open();
+        //        using (SqlCommand cmd = conn.CreateCommand())
+        //        {
+        //            string sql = $@"
+        //             SELECT
+        //                    d.Id,
+        //                    d.[Name],
+        //                    d.Budget,
+        //                    e.Id,
+        //                    e.FirstName,
+        //                    e.LastName,
+        //                    e.DepartmentId,
+        //                    e.IsSuperVisor
+        //                FROM Department d
+        //                LEFT JOIN Employee e ON e.DepartmentId = d.Id 
+        //                WHERE d.Id = {id}                   
+        //            ";
+        //            DepartmentDetailsViewModel model = new DepartmentDetailsViewModel(
+        //                sql,
+        //                    (dept, emp) =>
+        //                {
+        //                    if (EmployeeList.Contains(emp))
+        //                    {
+        //                        EmployeeList.Add(emp);
+        //                    }
+
+        //                    return View(model);
+        //                });
+        //        }
+        //    }
+        //}
+
+        //Get Single Department (for Delete):
         public static Department GetOneDepartment(int id)
         {
             using (SqlConnection conn = Connection)
@@ -65,8 +108,12 @@ namespace BangazonWorkforce.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT
-                            d.Id, d.Name, d.Budget
-                        FROM Department d WHERE d.Id = @id";
+                            d.Id, d.Name, d.Budget,
+                            e.Id, e.FirstName, e.LastName, e.DepartmentId, e.IsSuperVisor
+                        FROM Department d
+                        LEFT JOIN Employee e ON e.DepartmentId = d.Id 
+                        WHERE d.Id = @id";
+
                     cmd.Parameters.Add(new SqlParameter("@id", id));
                     SqlDataReader reader = cmd.ExecuteReader();
                     Department Department = null;
@@ -76,7 +123,8 @@ namespace BangazonWorkforce.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
-                            Budget = reader.GetInt32(reader.GetOrdinal("Budget"))
+                            Budget = reader.GetInt32(reader.GetOrdinal("Budget")),
+                            //EmployeeList = 
                         };
                     }
                     reader.Close();
