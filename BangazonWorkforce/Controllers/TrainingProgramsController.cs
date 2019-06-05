@@ -34,7 +34,8 @@ namespace BangazonWorkforce.Controllers
         // GET: TrainingPrograms/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            TrainingProgram trainingProgram = TrainingProgramRepository.GetOneTrainingProgramWithAttendingEmployees(id);
+            return View(trainingProgram);
         }
 
         // GET: TrainingPrograms/Create
@@ -63,23 +64,24 @@ namespace BangazonWorkforce.Controllers
         // GET: TrainingPrograms/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            TrainingProgram trainingProgram = TrainingProgramRepository.GetOneTrainingProgram(id);
+            return View(trainingProgram);
         }
 
         // POST: TrainingPrograms/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, TrainingProgram trainingProgram)
         {
             try
             {
-                // TODO: Add update logic here
 
+                TrainingProgramRepository.UpdateTrainingProgram(id, trainingProgram);   
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(trainingProgram);
             }
         }
 
