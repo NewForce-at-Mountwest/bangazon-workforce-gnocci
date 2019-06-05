@@ -1,10 +1,10 @@
-﻿using System;
+﻿using BangazonWorkforce.Models;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using BangazonWorkforce.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace BangazonWorkforce.Repositories
 {
@@ -74,28 +74,29 @@ namespace BangazonWorkforce.Repositories
                         SELECT e.Id,
                      e.FirstName,
                     e.LastName,
+e.IsSuperVisor,
                     d.[Name] AS 'department'
                     FROM Employee e FULL JOIN Department d ON e.DepartmentId = d.Id
                     WHERE e.Id = @id";
                     cmd.Parameters.Add(new SqlParameter("@id", id));
                     SqlDataReader reader = cmd.ExecuteReader();
 
-                    Employee employee = null;
+                    Employee Employee = null;
 
                     if (reader.Read())
                     {
-                        employee = new Employee
+                        Employee = new Employee
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                            IsSuperVisor = reader.GetBoolean(reader.GetOrdinal("isSuperVisor")),
+                            IsSuperVisor = reader.GetBoolean(reader.GetOrdinal("IsSuperVisor")),
                             Department = reader.GetString(reader.GetOrdinal("department"))
                         };
                     }
                     reader.Close();
 
-                    return employee;
+                    return Employee;
                 }
             }
 
@@ -109,21 +110,41 @@ namespace BangazonWorkforce.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     // Update the student's basic info
-                    string command = @"UPDATE Student
-                                            SET firstName=@firstName, 
-                                            lastName=@lastName, 
-                                            isSuperVisor=@isSuperVisor, 
+                    string command = @"UPDATE Employee
+                                            SET FirstName=@FirstName, 
+                                            LastName=@LastName, 
+                                            IsSuperVisor=@IsSuperVisor, 
                                             DepartmentId=@DepartmentId
                                             WHERE Id = @id";
                     cmd.CommandText = command;
-                    cmd.Parameters.Add(new SqlParameter("@firstName", employee.FirstName));
-                    cmd.Parameters.Add(new SqlParameter("@lastName", employee.LastName));
-                    cmd.Parameters.Add(new SqlParameter("@isSuperVisor", employee.IsSuperVisor));
+                    cmd.Parameters.Add(new SqlParameter("@FirstName", employee.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@LastName", employee.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@IsSuperVisor", employee.IsSuperVisor));
                     cmd.Parameters.Add(new SqlParameter("@DepartmentId", employee.DepartmentId));
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    cmd.Parameters.Add(new SqlParameter("@Id", id));
                     int rowsAffected = cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        public static void CreateEmployee(Employee employee)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Employee
+                (FirstName, LastName, IsSuperVisor, DepartmentId) VALUES
+                (@FirstName, @LastName, @IsSuperVisor, @DepartmentId)";
+                    cmd.Parameters.Add(new SqlParameter("@FirstName", employee.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@LastName", employee.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@IsSuperVisor", employee.IsSuperVisor));
+                    cmd.Parameters.Add(new SqlParameter("@DepartmentId", employee.DepartmentId));
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
         }
     }
 }
