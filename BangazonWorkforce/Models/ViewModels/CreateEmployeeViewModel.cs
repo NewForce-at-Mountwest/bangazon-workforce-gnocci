@@ -36,7 +36,7 @@ namespace BangazonWorkforce.Models.ViewModels
             // Add an option with instructiosn for how to use the dropdown
             Departments.Insert(0, new SelectListItem
             {
-                Text = "Choose a cohort",
+                Text = "Choose a department",
                 Value = "0"
             });
 

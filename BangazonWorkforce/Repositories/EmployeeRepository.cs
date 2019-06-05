@@ -1,4 +1,5 @@
 ﻿using BangazonWorkforce.Models;
+using BangazonWorkforce.Models.ViewModels;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -75,7 +76,8 @@ namespace BangazonWorkforce.Repositories
                      e.FirstName,
                     e.LastName,
 e.IsSuperVisor,
-                    d.[Name] AS 'department'
+                    d.[Name] AS 'department', 
+d.Id AS'DepartmentId'
                     FROM Employee e FULL JOIN Department d ON e.DepartmentId = d.Id
                     WHERE e.Id = @id";
                     cmd.Parameters.Add(new SqlParameter("@id", id));
@@ -91,6 +93,7 @@ e.IsSuperVisor,
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             IsSuperVisor = reader.GetBoolean(reader.GetOrdinal("IsSuperVisor")),
+                            DepartmentId = reader.GetInt32(reader.GetOrdinal("DepartmentId")),
                             Department = reader.GetString(reader.GetOrdinal("department"))
                         };
                     }
@@ -127,7 +130,7 @@ e.IsSuperVisor,
             }
         }
 
-        public static void CreateEmployee(Employee employee)
+        public static void CreateEmployee(CreateEmployeeViewModel model)
         {
             using (SqlConnection conn = Connection)
             {
@@ -137,10 +140,10 @@ e.IsSuperVisor,
                     cmd.CommandText = @"INSERT INTO Employee
                 (FirstName, LastName, IsSuperVisor, DepartmentId) VALUES
                 (@FirstName, @LastName, @IsSuperVisor, @DepartmentId)";
-                    cmd.Parameters.Add(new SqlParameter("@FirstName", employee.FirstName));
-                    cmd.Parameters.Add(new SqlParameter("@LastName", employee.LastName));
-                    cmd.Parameters.Add(new SqlParameter("@IsSuperVisor", employee.IsSuperVisor));
-                    cmd.Parameters.Add(new SqlParameter("@DepartmentId", employee.DepartmentId));
+                    cmd.Parameters.Add(new SqlParameter("@FirstName", model.employee.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@LastName", model.employee.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@IsSuperVisor", model.employee.IsSuperVisor));
+                    cmd.Parameters.Add(new SqlParameter("@DepartmentId", model.employee.DepartmentId));
                     cmd.ExecuteNonQuery();
                 }
             }

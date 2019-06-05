@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using BangazonWorkforce.Models;
 using BangazonWorkforce.Repositories;
+using BangazonWorkforce.Models.ViewModels;
 
 namespace BangazonWorkforce.Controllers
 {
@@ -15,6 +16,7 @@ namespace BangazonWorkforce.Controllers
         public EmployeeController(IConfiguration config)
         {
             EmployeeRepository.SetConfig(config);
+            DepartmentRepository.SetConfig(config);
         }
 
         // GET: Employees
@@ -34,9 +36,26 @@ namespace BangazonWorkforce.Controllers
         // GET: Employees/Create
         public ActionResult Create()
         {
-            Employee employee = new Employee();
+            CreateEmployeeViewModel employee = new CreateEmployeeViewModel();
             return View(employee);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(CreateEmployeeViewModel model)
+        {
+            try
+            {
+                EmployeeRepository.CreateEmployee(model);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+
+
+        }
+
 
         // GET: Exercise/Edit/5
         public ActionResult Edit(int id)
