@@ -62,41 +62,7 @@ namespace BangazonWorkforce.Repositories
         }
 
         //Get Single Department (Details):
-        //public static async Task<Department> GetDepartmentDetails(int id)
-        //{
-        //    using (SqlConnection conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = conn.CreateCommand())
-        //        {
-        //            string sql = $@"
-        //             SELECT
-        //                    d.Id,
-        //                    d.[Name],
-        //                    d.Budget,
-        //                    e.Id,
-        //                    e.FirstName,
-        //                    e.LastName,
-        //                    e.DepartmentId,
-        //                    e.IsSuperVisor
-        //                FROM Department d
-        //                LEFT JOIN Employee e ON e.DepartmentId = d.Id 
-        //                WHERE d.Id = {id}                   
-        //            ";
-        //            DepartmentDetailsViewModel model = new DepartmentDetailsViewModel(
-        //                sql,
-        //                    (dept, emp) =>
-        //                {
-        //                    if (EmployeeList.Contains(emp))
-        //                    {
-        //                        EmployeeList.Add(emp);
-        //                    }
 
-        //                    return View(model);
-        //                });
-        //        }
-        //    }
-        //}
 
         //Get Single Department (for Delete):
         public static Department GetOneDepartment(int id)
@@ -124,7 +90,6 @@ namespace BangazonWorkforce.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Budget = reader.GetInt32(reader.GetOrdinal("Budget")),
-                            //EmployeeList = 
                         };
                     }
                     reader.Close();
