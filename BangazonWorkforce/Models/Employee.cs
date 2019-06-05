@@ -11,7 +11,7 @@ namespace BangazonWorkforce.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int DepartmentId { get; set; }
-        public bool IsSuperVisor { get; set; }
+        public Boolean IsSuperVisor { get; set; }
         public string Department { get; set; }
         //------------------Referenct to Department Name Ticket #6--------------------//
         public Department CurrentDepartment { get; set; }
