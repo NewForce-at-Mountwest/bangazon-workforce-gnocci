@@ -45,15 +45,17 @@ namespace BangazonWorkforce.Repositories
                     List<Employee> employees = new List<Employee>();
                     while (reader.Read())
                     {
-                        Employee employee = new Employee
+                        if (!reader.IsDBNull(reader.GetOrdinal("Id")))
+                        {
+                            Employee employee = new Employee
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                            Department = reader.GetString(reader.GetOrdinal("department"))
+                            Department = reader.GetString(reader.GetOrdinal("Department"))
                         };
-
                         employees.Add(employee);
+                        }
                     }
 
                     reader.Close();
