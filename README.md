@@ -174,7 +174,7 @@ And the user should see the Department Budget
 And the user should see the full name of each Employee in that Department
 
 
-### TrainingProgram
+### Training Program
 
 Given a user wants to view all Training Programs
 
