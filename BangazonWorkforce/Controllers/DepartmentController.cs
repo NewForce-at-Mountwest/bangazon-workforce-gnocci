@@ -29,7 +29,7 @@ namespace BangazonWorkforce.Controllers
         // GET: Departments/Details/XXX
         public ActionResult Details(int id)
         {
-            Department department = DepartmentRepository.GetOneDepartment(id);
+            Department department = DepartmentRepository.GetOneDepartmentwithEmployees(id);
             return View(department);
         }
 
