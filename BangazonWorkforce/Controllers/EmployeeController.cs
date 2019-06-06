@@ -1,70 +1,105 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using BangazonWorkforce.Models;
-<<<<<<< HEAD
-=======
-
->>>>>>> master
+using BangazonWorkforce.Repositories;
+using BangazonWorkforce.Models.ViewModels;
 
 namespace BangazonWorkforce.Controllers
 {
     public class EmployeeController : Controller
     {
-
-        private readonly IConfiguration _config;
-
         public EmployeeController(IConfiguration config)
         {
-            _config = config;
+            EmployeeRepository.SetConfig(config);
+            DepartmentRepository.SetConfig(config);
         }
 
-        public SqlConnection Connection
-        {
-            get
-            {
-                return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-            }
-        }
-        // GET: Students
+        // GET: Employees
         public ActionResult Index()
         {
-            using (SqlConnection conn = Connection)
+            List<Employee> allEmployees = EmployeeRepository.GetEmployees();
+            return View(allEmployees);
+        }
+
+        // GET: Employees/Details/5
+        public ActionResult Details(int id)
+        {
+            Employee employee = EmployeeRepository.GetOneEmployee(id);
+            return View(employee);
+        }
+
+        // GET: Employees/Create
+        public ActionResult Create()
+        {
+            CreateEmployeeViewModel employee = new CreateEmployeeViewModel();
+            return View(employee);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(CreateEmployeeViewModel model)
+        {
+            try
             {
-                conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
-                     SELECT e.Id,
-                     e.FirstName,
-                    e.LastName,
-                    d.[Name] AS 'department'
-                    FROM Employee e FULL JOIN Department d ON e.DepartmentId = d.Id";
-                    SqlDataReader reader = cmd.ExecuteReader();
+                EmployeeRepository.CreateEmployee(model);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
 
-                    List<Employee> employees = new List<Employee>();
-                    while (reader.Read())
-                    {
-                        Employee employee = new Employee
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                            Department = reader.GetString(reader.GetOrdinal("department"))
-                        };
 
-                        employees.Add(employee);
-                    }
+        }
 
-                    reader.Close();
 
-                    return View(employees);
-                }
+        // GET: Exercise/Edit/5
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+
+        // POST: Exercise/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, IFormCollection collection)
+        {
+            try
+            {
+                // TODO: Add update logic here
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Exercise/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: Exercise/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
             }
         }
     }
