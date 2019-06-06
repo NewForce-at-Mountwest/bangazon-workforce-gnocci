@@ -22,7 +22,7 @@ namespace BangazonWorkforce.Models.ViewModels
         {
 
             employee = EmployeeRepository.GetOneEmployee(employeeId);
-            Departments = DepartmentRepository.GetAllDepartments()
+            Departments = DepartmentRepository.GetDepartments()
                 .Select(department => new SelectListItem()
                 {
                     Text = department.Name,
