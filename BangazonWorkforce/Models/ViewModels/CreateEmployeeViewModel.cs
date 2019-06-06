@@ -24,7 +24,7 @@ namespace BangazonWorkforce.Models.ViewModels
         public CreateEmployeeViewModel()
         {
 
-            Departments = DepartmentRepository.GetAllDepartments()
+            Departments = DepartmentRepository.GetDepartments()
                 .Select(department => new SelectListItem()
                 {
                     Text = department.Name,
