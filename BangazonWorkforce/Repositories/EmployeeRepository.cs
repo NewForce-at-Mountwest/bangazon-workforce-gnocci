@@ -105,7 +105,9 @@ d.Id AS'DepartmentId'
 
         }
 
-        public static void UpdateEmployee(int id, Employee employee)
+      
+
+        public static void UpdateEmployee(int id, EditEmployeeViewModel employee)
         {
             using (SqlConnection conn = Connection)
             {
@@ -120,10 +122,10 @@ d.Id AS'DepartmentId'
                                             DepartmentId=@DepartmentId
                                             WHERE Id = @id";
                     cmd.CommandText = command;
-                    cmd.Parameters.Add(new SqlParameter("@FirstName", employee.FirstName));
-                    cmd.Parameters.Add(new SqlParameter("@LastName", employee.LastName));
-                    cmd.Parameters.Add(new SqlParameter("@IsSuperVisor", employee.IsSuperVisor));
-                    cmd.Parameters.Add(new SqlParameter("@DepartmentId", employee.DepartmentId));
+                    cmd.Parameters.Add(new SqlParameter("@FirstName", employee.employee.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@LastName", employee.employee.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@IsSuperVisor", employee.employee.IsSuperVisor));
+                    cmd.Parameters.Add(new SqlParameter("@DepartmentId", employee.employee.DepartmentId));
                     cmd.Parameters.Add(new SqlParameter("@Id", id));
                     int rowsAffected = cmd.ExecuteNonQuery();
                 }

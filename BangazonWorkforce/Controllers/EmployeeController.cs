@@ -57,28 +57,29 @@ namespace BangazonWorkforce.Controllers
         }
 
 
-        // GET: Exercise/Edit/5
+
+        // GET: Employees/Edit/3
         public ActionResult Edit(int id)
         {
-            return View();
+            EditEmployeeViewModel employee = new EditEmployeeViewModel(id);
+            return View(employee);
         }
 
-        // POST: Exercise/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, EditEmployeeViewModel viewModel)
         {
             try
             {
-                // TODO: Add update logic here
-
+                EmployeeRepository.UpdateEmployee(id, viewModel);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception)
             {
-                return View();
+                return View(viewModel);
             }
         }
+
 
         // GET: Exercise/Delete/5
         public ActionResult Delete(int id)
