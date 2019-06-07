@@ -30,7 +30,7 @@ The [ERD](https://dbdiagram.io/d/5cdbeaf51f6a891a6a654e2) consist of the followi
 1. Product
 1. ProductType
 1. TrainingProgram
-![alt text](https://github.com/NewForce-at-Mountwest/bangazon-workforce-gnocci/blob/master/BangazonERD.png?raw=true])
+<kbd>![alt text](https://github.com/NewForce-at-Mountwest/bangazon-workforce-gnocci/blob/master/BangazonERD.png?raw=true])</kbd>
 
 
 ### To Test Locally
